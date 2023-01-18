@@ -117,10 +117,10 @@ public class MinioService {
         }
         return bucketname;
     }
-    public UserInfo getUserinfo(String accestoken) {
+    public UserInfo getUserinfo(String username) {
         try {
             Map<String, String> a = minioAdminClient.listCannedPolicies();
-            return minioAdminClient.getUserInfo(accestoken);
+            return minioAdminClient.getUserInfo(username);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (IOException e) {

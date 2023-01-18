@@ -1,6 +1,7 @@
 package com.viettel.vtskit.minio.configuration;
 
 import com.viettel.vtskit.minio.MinioService;
+import com.viettel.vtskit.minio.mapper.FileInfoMapper;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
@@ -34,6 +35,12 @@ public class MinioAutoConfiguration {
     public MinioService minioService(){
         return new MinioService();
     }
+
+    @Bean
+    public FileInfoMapper fileInfoMapper(){
+        return new FileInfoMapper();
+    }
+
 
     @Bean
     public MinioClient minioClient(){
