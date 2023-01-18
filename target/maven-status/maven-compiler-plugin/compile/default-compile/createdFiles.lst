@@ -1,0 +1,15 @@
+com\viettel\vtskit\minio\utils\MapperUtils.class
+com\viettel\vtskit\minio\utils\StringUtils.class
+com\viettel\vtskit\minio\mapper\BaseMapper.class
+META-INF\spring-configuration-metadata.json
+com\viettel\vtskit\minio\configuration\MinioProperties.class
+com\viettel\vtskit\minio\configuration\MinioAutoConfiguration.class
+com\viettel\vtskit\minio\model\FileObjectDTO.class
+com\viettel\vtskit\minio\mapper\FileInfoMapper$1.class
+com\viettel\vtskit\minio\MinioService$1.class
+com\viettel\vtskit\minio\mapper\FileInfoMapper.class
+com\viettel\vtskit\minio\MinioService.class
+com\viettel\vtskit\minio\mapper\BaseDTO.class
+com\viettel\vtskit\minio\utils\Validate.class
+com\viettel\vtskit\minio\configuration\ConstantConfiguration.class
+com\viettel\vtskit\minio\model\UploadResult.class

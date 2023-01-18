@@ -1,12 +1,14 @@
 package com.viettel.vtskit.minio.configuration;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.viettel.vtskit.minio.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
-@ConfigurationProperties(prefix = "vtskit.minio")
+@ConfigurationProperties(prefix = "minio")
 public class MinioProperties {
 
     @Value("${server:}")
@@ -23,6 +25,12 @@ public class MinioProperties {
 
     @Value("${autoCreateBucket:true}")
     private boolean autoCreateBucket;
+
+    @JsonProperty("allow-type")
+    private List<String> allowType;
+
+    @JsonProperty("max-size")
+    private Integer maxSize;
 
     private void validateProperties(){
         if(StringUtils.isNullOrEmpty(server)){
@@ -82,5 +90,21 @@ public class MinioProperties {
 
     public void setAutoCreateBucket(boolean autoCreateBucket) {
         this.autoCreateBucket = autoCreateBucket;
+    }
+
+    public List<String> getAllowType() {
+        return allowType;
+    }
+
+    public void setAllowType(List<String> allowType) {
+        this.allowType = allowType;
+    }
+
+    public Integer getMaxSize() {
+        return maxSize;
+    }
+
+    public void setMaxSize(Integer maxSize) {
+        this.maxSize = maxSize;
     }
 }

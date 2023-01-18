@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MinioService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">vts-kit-lib-minio-integrated</a> &gt; <a href="index.source.html" class="el_package">com.viettel.vtskit.minio</a> &gt; <span class="el_source">MinioService.java</span></div><h1>MinioService.java</h1><pre class="source lang-java linenums">package com.viettel.vtskit.minio;
+
+import com.google.common.collect.Lists;
+import com.viettel.vtskit.minio.configuration.ConstantConfiguration;
+import com.viettel.vtskit.minio.configuration.MinioProperties;
+import com.viettel.vtskit.minio.mapper.FileInfoMapper;
+import com.viettel.vtskit.minio.model.FileObjectDTO;
+import com.viettel.vtskit.minio.model.UploadResult;
+import com.viettel.vtskit.minio.utils.StringUtils;
+
+import com.viettel.vtskit.minio.utils.Validate;
+import io.minio.*;
+import io.minio.admin.MinioAdminClient;
+import io.minio.admin.UserInfo;
+import io.minio.errors.*;
+import io.minio.messages.Bucket;
+import io.minio.messages.Item;
+import io.minio.messages.VersioningConfiguration;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.Nullable;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
+
+
+<span class="nc" id="L35">public class MinioService {</span>
+
+    private MinioAdminClient minioAdminClient ;
+    private MinioClient minioClient;
+    private MinioProperties minioProperties;
+    private FileInfoMapper fileInfoMapper;
+
+    public String createBucket(String bucketname) {
+        try {
+<span class="nc" id="L44">            minioClient.makeBucket(</span>
+<span class="nc" id="L45">                    MakeBucketArgs.builder()</span>
+<span class="nc" id="L46">                            .bucket(bucketname)</span>
+<span class="nc" id="L47">                            .build());</span>
+<span class="nc" id="L48">        } catch (InvalidKeyException e) {</span>
+<span class="nc" id="L49">            e.printStackTrace();</span>
+<span class="nc" id="L50">        } catch (NoSuchAlgorithmException e) {</span>
+<span class="nc" id="L51">            e.printStackTrace();</span>
+<span class="nc" id="L52">        } catch (ErrorResponseException e) {</span>
+<span class="nc" id="L53">            e.printStackTrace();</span>
+<span class="nc" id="L54">        } catch (InvalidResponseException e) {</span>
+<span class="nc" id="L55">            e.printStackTrace();</span>
+<span class="nc" id="L56">        } catch (ServerException e) {</span>
+<span class="nc" id="L57">            e.printStackTrace();</span>
+<span class="nc" id="L58">        } catch (InsufficientDataException e) {</span>
+<span class="nc" id="L59">            e.printStackTrace();</span>
+<span class="nc" id="L60">        } catch (XmlParserException e) {</span>
+<span class="nc" id="L61">            e.printStackTrace();</span>
+<span class="nc" id="L62">        } catch (InternalException e) {</span>
+<span class="nc" id="L63">            e.printStackTrace();</span>
+<span class="nc" id="L64">        } catch (IOException e) {</span>
+<span class="nc" id="L65">            e.printStackTrace();</span>
+<span class="nc" id="L66">        }</span>
+<span class="nc" id="L67">        return bucketname;</span>
+    }
+    public String setBucketVersion(String bucketname) {
+
+        try {
+<span class="nc" id="L72">            VersioningConfiguration config = new VersioningConfiguration(VersioningConfiguration.Status.ENABLED, true);</span>
+<span class="nc" id="L73">            minioClient.setBucketVersioning(</span>
+<span class="nc" id="L74">                    SetBucketVersioningArgs.builder().bucket(bucketname).config(config).build());</span>
+<span class="nc" id="L75">        } catch (InvalidKeyException e) {</span>
+<span class="nc" id="L76">            e.printStackTrace();</span>
+<span class="nc" id="L77">        } catch (NoSuchAlgorithmException e) {</span>
+<span class="nc" id="L78">            e.printStackTrace();</span>
+<span class="nc" id="L79">        } catch (ErrorResponseException e) {</span>
+<span class="nc" id="L80">            e.printStackTrace();</span>
+<span class="nc" id="L81">        } catch (InvalidResponseException e) {</span>
+<span class="nc" id="L82">            e.printStackTrace();</span>
+<span class="nc" id="L83">        } catch (ServerException e) {</span>
+<span class="nc" id="L84">            e.printStackTrace();</span>
+<span class="nc" id="L85">        } catch (InsufficientDataException e) {</span>
+<span class="nc" id="L86">            e.printStackTrace();</span>
+<span class="nc" id="L87">        } catch (XmlParserException e) {</span>
+<span class="nc" id="L88">            e.printStackTrace();</span>
+<span class="nc" id="L89">        } catch (InternalException e) {</span>
+<span class="nc" id="L90">            e.printStackTrace();</span>
+<span class="nc" id="L91">        } catch (IOException e) {</span>
+<span class="nc" id="L92">            e.printStackTrace();</span>
+<span class="nc" id="L93">        }</span>
+<span class="nc" id="L94">        return null;</span>
+    }
+    public String deleteBucket(String bucketname) {
+        try {
+<span class="nc" id="L98">            minioClient.removeBucket(RemoveBucketArgs.builder().bucket(bucketname).build());</span>
+<span class="nc" id="L99">        } catch (InvalidKeyException e) {</span>
+<span class="nc" id="L100">            e.printStackTrace();</span>
+<span class="nc" id="L101">        } catch (NoSuchAlgorithmException e) {</span>
+<span class="nc" id="L102">            e.printStackTrace();</span>
+<span class="nc" id="L103">        } catch (ErrorResponseException e) {</span>
+<span class="nc" id="L104">            e.printStackTrace();</span>
+<span class="nc" id="L105">        } catch (InvalidResponseException e) {</span>
+<span class="nc" id="L106">            e.printStackTrace();</span>
+<span class="nc" id="L107">        } catch (ServerException e) {</span>
+<span class="nc" id="L108">            e.printStackTrace();</span>
+<span class="nc" id="L109">        } catch (InsufficientDataException e) {</span>
+<span class="nc" id="L110">            e.printStackTrace();</span>
+<span class="nc" id="L111">        } catch (XmlParserException e) {</span>
+<span class="nc" id="L112">            e.printStackTrace();</span>
+<span class="nc" id="L113">        } catch (InternalException e) {</span>
+<span class="nc" id="L114">            e.printStackTrace();</span>
+<span class="nc" id="L115">        } catch (IOException e) {</span>
+<span class="nc" id="L116">            e.printStackTrace();</span>
+<span class="nc" id="L117">        }</span>
+<span class="nc" id="L118">        return bucketname;</span>
+    }
+    public UserInfo getUserinfo(String accestoken) {
+        try {
+<span class="nc" id="L122">            Map&lt;String, String&gt; a = minioAdminClient.listCannedPolicies();</span>
+<span class="nc" id="L123">            return minioAdminClient.getUserInfo(accestoken);</span>
+<span class="nc" id="L124">        } catch (NoSuchAlgorithmException e) {</span>
+<span class="nc" id="L125">            e.printStackTrace();</span>
+<span class="nc" id="L126">        } catch (IOException e) {</span>
+<span class="nc" id="L127">            e.printStackTrace();</span>
+<span class="nc" id="L128">        } catch (InvalidKeyException e) {</span>
+<span class="nc" id="L129">            e.printStackTrace();</span>
+<span class="nc" id="L130">        }</span>
+<span class="nc" id="L131">        return null;</span>
+    }
+
+    public List&lt;String&gt; getListBucket() {
+        try {
+<span class="nc" id="L136">            List&lt;Bucket&gt; bucketList = minioClient.listBuckets();</span>
+<span class="nc" id="L137">            List&lt;String&gt; listName =  new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">            for (Bucket b: bucketList</span>
+            ) {
+<span class="nc" id="L140">                listName.add(b.name());</span>
+<span class="nc" id="L141">            }</span>
+<span class="nc" id="L142">            return listName;</span>
+<span class="nc" id="L143">        } catch (InvalidKeyException e) {</span>
+<span class="nc" id="L144">            e.printStackTrace();</span>
+<span class="nc" id="L145">        } catch (NoSuchAlgorithmException e) {</span>
+<span class="nc" id="L146">            e.printStackTrace();</span>
+<span class="nc" id="L147">        } catch (ErrorResponseException e) {</span>
+<span class="nc" id="L148">            e.printStackTrace();</span>
+<span class="nc" id="L149">        } catch (InvalidResponseException e) {</span>
+<span class="nc" id="L150">            e.printStackTrace();</span>
+<span class="nc" id="L151">        } catch (ServerException e) {</span>
+<span class="nc" id="L152">            e.printStackTrace();</span>
+<span class="nc" id="L153">        } catch (InsufficientDataException e) {</span>
+<span class="nc" id="L154">            e.printStackTrace();</span>
+<span class="nc" id="L155">        } catch (XmlParserException e) {</span>
+<span class="nc" id="L156">            e.printStackTrace();</span>
+<span class="nc" id="L157">        } catch (InternalException e) {</span>
+<span class="nc" id="L158">            e.printStackTrace();</span>
+<span class="nc" id="L159">        } catch (IOException e) {</span>
+<span class="nc" id="L160">            e.printStackTrace();</span>
+<span class="nc" id="L161">        }</span>
+
+<span class="nc" id="L163">        return null;</span>
+    }
+    public List &lt; FileObjectDTO &gt; getListFile(String bucketname, @Nullable String path) throws IOException, InvalidKeyException, InvalidResponseException, InsufficientDataException, NoSuchAlgorithmException, ServerException, InternalException, XmlParserException, ErrorResponseException {
+<span class="nc bnc" id="L166" title="All 2 branches missed.">        if (path == null) path = &quot;&quot;;</span>
+<span class="nc" id="L167">        ListObjectsArgs args = new ListObjectsArgs.Builder()</span>
+<span class="nc" id="L168">                .bucket(bucketname)</span>
+<span class="nc" id="L169">                .prefix(path)</span>
+<span class="nc" id="L170">                .includeUserMetadata(false)</span>
+<span class="nc" id="L171">                .includeVersions(true)</span>
+<span class="nc" id="L172">                .build();</span>
+<span class="nc" id="L173">        Iterable &lt; Result &lt; Item &gt;&gt; results = minioClient.listObjects(args);</span>
+//        Iterator &lt; Result &lt; Item &gt;&gt; result = results.iterator();
+//        while (result.hasNext()) {
+//            Item i = result.next().get();
+//            System.out.println(&quot;VERSION &quot; + i.versionId());
+//        }
+<span class="nc" id="L179">        List &lt; FileObjectDTO &gt; resultList = fileInfoMapper.mapToListDTO(Lists.newArrayList(results));</span>
+<span class="nc" id="L180">        orderData(resultList);</span>
+<span class="nc" id="L181">        return resultList;</span>
+    }
+    public FileObjectDTO getFileInfo(String bucket, String path) {
+<span class="nc" id="L184">        StatObjectArgs args = new StatObjectArgs.Builder()</span>
+<span class="nc" id="L185">                .bucket(bucket)</span>
+<span class="nc" id="L186">                .object(path)</span>
+
+<span class="nc" id="L188">                .build();</span>
+        try{
+<span class="nc" id="L190">            StatObjectResponse result = minioClient.statObject(args);</span>
+<span class="nc" id="L191">            FileObjectDTO fileItem = new FileObjectDTO();</span>
+<span class="nc" id="L192">            fileItem.setName(FilenameUtils.getName(result.object()));</span>
+<span class="nc" id="L193">            fileItem.setContentType(result.contentType());</span>
+<span class="nc" id="L194">            fileItem.setSize(result.size());</span>
+<span class="nc" id="L195">            fileItem.setLastModifiedText(result.lastModified().toString());</span>
+
+<span class="nc" id="L197">            return fileItem;</span>
+<span class="nc" id="L198">        }catch (ErrorResponseException | InsufficientDataException | InternalException | InvalidKeyException | InvalidResponseException | IOException | NoSuchAlgorithmException | ServerException | XmlParserException ex){</span>
+<span class="nc" id="L199">            ex.printStackTrace();</span>
+<span class="nc" id="L200">            return null;</span>
+        }
+    }
+
+    public byte[] getFileData(String bucket,  String path) throws IOException, InvalidKeyException, InvalidResponseException, InsufficientDataException, NoSuchAlgorithmException, ServerException, InternalException, XmlParserException, ErrorResponseException {
+<span class="nc" id="L205">        GetObjectResponse response = null;</span>
+        try {
+<span class="nc" id="L207">            Map&lt;String, String&gt; header = new HashMap&lt;&gt;();</span>
+//            header.put(&quot;Range&quot;, range);
+<span class="nc" id="L209">            GetObjectArgs args = new GetObjectArgs.Builder()</span>
+<span class="nc" id="L210">                    .bucket(bucket)</span>
+<span class="nc" id="L211">                    .object(path)</span>
+<span class="nc" id="L212">                    .extraHeaders(header)</span>
+
+<span class="nc" id="L214">                    .build();</span>
+<span class="nc" id="L215">            response = minioClient.getObject(args);</span>
+<span class="nc" id="L216">            return IOUtils.toByteArray(response);</span>
+<span class="nc" id="L217">        }catch (Exception e){</span>
+<span class="nc" id="L218">            throw e;</span>
+        }
+
+    }
+    public byte[] getFileDataWithVersion(String bucket,  String path, String version) throws IOException, InvalidKeyException, InvalidResponseException, InsufficientDataException, NoSuchAlgorithmException, ServerException, InternalException, XmlParserException, ErrorResponseException {
+<span class="nc" id="L223">        GetObjectResponse response = null;</span>
+        try {
+<span class="nc" id="L225">            Map&lt;String, String&gt; header = new HashMap&lt;&gt;();</span>
+//            header.put(&quot;Range&quot;, range);
+<span class="nc" id="L227">            GetObjectArgs args = new GetObjectArgs.Builder()</span>
+<span class="nc" id="L228">                    .bucket(bucket)</span>
+<span class="nc" id="L229">                    .object(path)</span>
+<span class="nc" id="L230">                    .extraHeaders(header)</span>
+<span class="nc" id="L231">                    .versionId(version)</span>
+
+<span class="nc" id="L233">                    .build();</span>
+<span class="nc" id="L234">            response = minioClient.getObject(args);</span>
+<span class="nc" id="L235">            return IOUtils.toByteArray(response);</span>
+<span class="nc" id="L236">        }catch (Exception e){</span>
+<span class="nc" id="L237">            throw e;</span>
+        }
+
+    }
+
+    private UploadResult uploadBytes(String fileName, byte[] bytes, String contentType) throws Exception {
+<span class="nc" id="L243">        ByteArrayInputStream is = null;</span>
+        try {
+<span class="nc" id="L245">            is = new ByteArrayInputStream(bytes);</span>
+<span class="nc" id="L246">            PutObjectArgs.Builder uploadArgs = PutObjectArgs.builder();</span>
+<span class="nc" id="L247">            uploadArgs.contentType(contentType);</span>
+<span class="nc" id="L248">            uploadArgs.object(fileName);</span>
+<span class="nc" id="L249">            uploadArgs.bucket(minioProperties.getBucket());</span>
+<span class="nc" id="L250">            uploadArgs.stream(is, bytes.length, ConstantConfiguration.PART_SIZE);</span>
+<span class="nc" id="L251">            ObjectWriteResponse response = minioClient.putObject(uploadArgs.build());</span>
+<span class="nc" id="L252">            UploadResult result = new UploadResult();</span>
+<span class="nc" id="L253">            result.setEtag(response.etag());</span>
+<span class="nc" id="L254">            result.setFileName(fileName);</span>
+<span class="nc" id="L255">            result.setVersionId(response.versionId());</span>
+<span class="nc" id="L256">            return result;</span>
+<span class="nc" id="L257">        } catch (Exception ex) {</span>
+<span class="nc" id="L258">            throw ex;</span>
+        } finally {
+<span class="nc bnc" id="L260" title="All 2 branches missed.">            if (is != null) {</span>
+<span class="nc" id="L261">                is.close();</span>
+            }
+        }
+    }
+
+    public UploadResult uploadMultipartFile(MultipartFile file) throws Exception {
+<span class="nc" id="L267">        byte[] fileData = file.getBytes();</span>
+<span class="nc bnc" id="L268" title="All 2 branches missed.">        if (Validate.validateSize(file, minioProperties)) {</span>
+<span class="nc" id="L269">            throw new IllegalArgumentException(&quot;The file size is too large, please reconfigure&quot;);</span>
+        }
+
+<span class="nc bnc" id="L272" title="All 2 branches missed.">        if (Validate.validateType(file, minioProperties)) {</span>
+<span class="nc" id="L273">            return uploadBytes(file.getOriginalFilename(), fileData, file.getContentType());</span>
+
+        }
+<span class="nc" id="L276">        throw new IllegalArgumentException(&quot;Content-type not allow&quot;);</span>
+    }
+
+    public UploadResult uploadString(String content) throws Exception {
+
+<span class="nc" id="L281">        byte[] fileData = content.getBytes(Charset.forName(&quot;UTF-8&quot;));</span>
+<span class="nc" id="L282">        String randomName = String.format(&quot;%s.txt&quot;, StringUtils.randomString());</span>
+<span class="nc" id="L283">        return uploadBytes(randomName, fileData, &quot;text/plain&quot;);</span>
+    }
+    private void orderData(List &lt; FileObjectDTO &gt; dataList) {
+<span class="nc" id="L286">        Collections.sort(dataList, new Comparator &lt; FileObjectDTO &gt; () {</span>
+            @Override
+            public int compare(FileObjectDTO o1, FileObjectDTO o2) {
+<span class="nc bnc" id="L289" title="All 4 branches missed.">                if (o1.isDirectory() &amp;&amp; !o2.isDirectory()) {</span>
+<span class="nc" id="L290">                    return -1;</span>
+<span class="nc bnc" id="L291" title="All 4 branches missed.">                } else if (o1.isDirectory() &amp;&amp; o2.isDirectory()) {</span>
+<span class="nc" id="L292">                    return o2.getName().compareTo(o1.getName());</span>
+                } else {
+<span class="nc" id="L294">                    return o2.getLastModifiedVal().compareTo(o1.getLastModifiedVal());</span>
+                }
+            }
+        });
+<span class="nc" id="L298">    }</span>
+
+    @Autowired
+    public void setMinioClient(MinioClient minioClient) {
+<span class="nc" id="L302">        this.minioClient = minioClient;</span>
+<span class="nc" id="L303">    }</span>
+
+    @Autowired
+    public void setMinioProperties(MinioProperties minioProperties) {
+<span class="nc" id="L307">        this.minioProperties = minioProperties;</span>
+<span class="nc" id="L308">    }</span>
+
+    @Autowired
+    public void setMinioAdminClient(MinioAdminClient minioAdminClient){
+<span class="nc" id="L312">        this.minioAdminClient = minioAdminClient;</span>
+<span class="nc" id="L313">    }</span>
+
+    @Autowired
+    public void setFileInfoMapper(FileInfoMapper fileInfoMapper) {
+<span class="nc" id="L317">        this.fileInfoMapper = fileInfoMapper;</span>
+<span class="nc" id="L318">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,15 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+vts-kit-lib-minio-integrated,com.viettel.vtskit.minio.mapper,BaseMapper,47,0,4,0,13,0,6,0,4,0
+vts-kit-lib-minio-integrated,com.viettel.vtskit.minio.mapper,BaseDTO,3,0,0,0,2,0,1,0,1,0
+vts-kit-lib-minio-integrated,com.viettel.vtskit.minio.mapper,FileInfoMapper.new Converter() {...},78,0,2,0,18,0,3,0,2,0
+vts-kit-lib-minio-integrated,com.viettel.vtskit.minio.mapper,FileInfoMapper,32,0,0,0,7,0,3,0,3,0
+vts-kit-lib-minio-integrated,com.viettel.vtskit.minio,MinioService.new Comparator() {...},32,0,8,0,6,0,6,0,2,0
+vts-kit-lib-minio-integrated,com.viettel.vtskit.minio,MinioService,524,0,10,0,189,0,23,0,18,0
+vts-kit-lib-minio-integrated,com.viettel.vtskit.minio.configuration,MinioAutoConfiguration,92,0,4,0,24,0,8,0,6,0
+vts-kit-lib-minio-integrated,com.viettel.vtskit.minio.configuration,MinioProperties,92,0,8,0,33,0,21,0,17,0
+vts-kit-lib-minio-integrated,com.viettel.vtskit.minio.configuration,ConstantConfiguration,3,0,0,0,1,0,1,0,1,0
+vts-kit-lib-minio-integrated,com.viettel.vtskit.minio.utils,StringUtils,15,0,4,0,3,0,5,0,3,0
+vts-kit-lib-minio-integrated,com.viettel.vtskit.minio.utils,Validate,67,0,6,0,14,0,6,0,3,0
+vts-kit-lib-minio-integrated,com.viettel.vtskit.minio.utils,MapperUtils,14,0,0,0,5,0,2,0,2,0
+vts-kit-lib-minio-integrated,com.viettel.vtskit.minio.model,FileObjectDTO,66,0,0,0,28,0,19,0,19,0
+vts-kit-lib-minio-integrated,com.viettel.vtskit.minio.model,UploadResult,24,0,0,0,10,0,7,0,7,0

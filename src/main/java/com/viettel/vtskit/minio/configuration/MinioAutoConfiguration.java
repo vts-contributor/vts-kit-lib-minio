@@ -4,6 +4,7 @@ import com.viettel.vtskit.minio.MinioService;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
+import io.minio.admin.MinioAdminClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -42,6 +43,15 @@ public class MinioAutoConfiguration {
         MinioClient minioClient = builder.build();
         createBucketIfNotExisted(minioClient);
         return minioClient;
+    }
+
+    @Bean
+    public MinioAdminClient minioAdminClient(){
+        MinioAdminClient.Builder builder = MinioAdminClient.builder();
+        builder.endpoint(minioProperties.getServer());
+        builder.credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey());
+        MinioAdminClient minioAdminClient = builder.build();
+        return minioAdminClient;
     }
 
     @Autowired
