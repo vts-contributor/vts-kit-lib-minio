@@ -171,11 +171,6 @@ public class MinioService {
                 .includeVersions(true)
                 .build();
         Iterable < Result < Item >> results = minioClient.listObjects(args);
-//        Iterator < Result < Item >> result = results.iterator();
-//        while (result.hasNext()) {
-//            Item i = result.next().get();
-//            System.out.println("VERSION " + i.versionId());
-//        }
         List < FileObjectDTO > resultList = fileInfoMapper.mapToListDTO(Lists.newArrayList(results));
         orderData(resultList);
         return resultList;

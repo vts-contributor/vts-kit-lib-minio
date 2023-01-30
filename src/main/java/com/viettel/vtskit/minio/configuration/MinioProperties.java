@@ -45,6 +45,13 @@ public class MinioProperties {
         if(StringUtils.isNullOrEmpty(bucket)){
             throw new IllegalArgumentException("Please config MinIO bucket");
         }
+        if(allowType == null || allowType.isEmpty()){
+            throw new IllegalArgumentException("Please config MinIO allow type");
+        }
+        if(maxSize == null){
+            throw new IllegalArgumentException("Please config MinIO max size");
+        }
+
     }
 
     @PostConstruct

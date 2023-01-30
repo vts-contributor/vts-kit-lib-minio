@@ -23,7 +23,7 @@ public class Validate {
         return isValidate;
     }
     public static boolean validateSize(MultipartFile file, MinioProperties minioProperties){
-        long sizeFile = minioProperties.getMaxSize() * 1024 * 1024;
+        long sizeFile = minioProperties.getMaxSize() * 1024 * 1024; // Convert Megabytes to Bytes
         long size = file.getSize();
         return true ? (size - sizeFile > 0) : false;
     }

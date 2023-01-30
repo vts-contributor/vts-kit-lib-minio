@@ -16,7 +16,8 @@ Feature List:
     * [Upload Multipartfile](#upload-multipartfile)
 - User
     * [Get User Info](#get-user-info)
-
+    * [File Permissions](#file-permissions)
+    
 Quick start
 -------
 * Just add the dependency to an existing Spring Boot project
@@ -37,7 +38,7 @@ minio:
     bucket: <bucket>
     auto-create-bucket: true
     allow-type: ["pdf","txt","json"] // type file allow to save
-    max-size: <size> // maximum file upload size
+    max-size: <size> // maximum file upload size (megabyte)
 ```
 
 * Finally, declare `MinioService` object
@@ -96,6 +97,8 @@ ObjectWriteResponse rsUpload = minioService.uploadMultipartFile(file);
 ```java
 UserInfo  userInfo = minioService.getUserinfo(String username);
 ```
+##### File permissions
+Minio has a feature to configure file permissions, which can be configured using the cli or on the dashboard page <SERVER_MINIO>28568:/identity/users/add-user (note: 28568 is the default port of the minio console)
 
 
 Build
