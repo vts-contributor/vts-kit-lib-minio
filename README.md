@@ -24,7 +24,7 @@ Quick start
 ```xml
 <dependency>
     <groupId>com.atviettelsolutions</groupId>
-    <artifactId>vts-kit-ms-minio-integrated</artifactId>
+    <artifactId>vts-kit-lib-minio</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```
