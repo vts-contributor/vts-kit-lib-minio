@@ -12,6 +12,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot.version>2.6.6</spring-boot.version>
         <spring.version>5.3.19</spring.version>
+        <minio.version>8.5.1</minio.version>
+        <minio-admin.version>8.5.1</minio-admin.version>
         <!--suppress UnresolvedMavenProperty -->
         <sonar.organization>${env.SONAR_ORGANIZATION}</sonar.organization>
     </properties>
@@ -103,12 +105,12 @@
         <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
-            <version>8.5.1</version>
+            <version>${minio.version}</version>
         </dependency>
         <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio-admin</artifactId>
-            <version>8.5.1</version>
+            <version>${minio-admin.version}</version>
         </dependency>
         <!-- End Min IO -->
 
