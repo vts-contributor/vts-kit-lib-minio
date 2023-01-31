@@ -13,6 +13,8 @@ Feature List:
     * [Get File Info](#get-file-info)
     * [Get File Data](#get-file-data)
     * [Get File Data with Version](#get-file-data-with-version-file)
+    * [Delete File Data](#delete-file-data)
+    * [Delete File Data with Version](#delete-file-data-with-version)
     * [Upload Multipartfile](#upload-multipartfile)
 - User
     * [Get User Info](#get-user-info)
@@ -83,11 +85,20 @@ FileObjectDTO fileObject = minioService.getFileInfo(String bucketname,String pat
 ```java
 byte[] fileData = minioService.getFileData(String bucketname,String path);
 ```
+
+
 ##### Get file data with version file
 ```java
 byte[] fileData = minioService.getFileDataWithVersion(String bucketname,String path,String version);
 ```
-
+##### Delete file data
+```java
+minioService.deleteFile(String bucketname,String path);
+```
+##### Delete file data with version
+```java
+minioService.deleteVersionFile(String bucketname,String path,String versionid);
+```
 ##### Upload MultipartFile
 ```java
 ObjectWriteResponse rsUpload = minioService.uploadMultipartFile(file);

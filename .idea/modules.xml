@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/vts-kit-lib-minio.iml" filepath="$PROJECT_DIR$/vts-kit-lib-minio.iml" />
       <module fileurl="file://$PROJECT_DIR$/vts-kit-ms-minio-integrated.iml" filepath="$PROJECT_DIR$/vts-kit-ms-minio-integrated.iml" />
     </modules>
   </component>

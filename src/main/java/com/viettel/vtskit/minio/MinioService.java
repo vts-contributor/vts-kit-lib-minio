@@ -227,12 +227,45 @@ public class MinioService {
 
                     .build();
             response = minioClient.getObject(args);
+
             return IOUtils.toByteArray(response);
         }catch (Exception e){
             throw e;
         }
 
     }
+
+    public void deleteFile(String bucketname, String path) throws IOException, InvalidKeyException, InvalidResponseException, InsufficientDataException, NoSuchAlgorithmException, ServerException, InternalException, XmlParserException, ErrorResponseException {
+        try {
+            Map<String, String> header = new HashMap<>();
+
+            RemoveObjectArgs args = new RemoveObjectArgs.Builder()
+                    .bucket(bucketname)
+                    .object(path)
+                    .extraHeaders(header)
+                    .build();
+            minioClient.removeObject(args);
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    public void deleteVersionFile(String bucketname, String path, String versionId) throws IOException, InvalidKeyException, InvalidResponseException, InsufficientDataException, NoSuchAlgorithmException, ServerException, InternalException, XmlParserException, ErrorResponseException {
+        try {
+            Map<String, String> header = new HashMap<>();
+
+            RemoveObjectArgs args = new RemoveObjectArgs.Builder()
+                    .bucket(bucketname)
+                    .object(path)
+                    .extraHeaders(header)
+                    .versionId(versionId)
+                    .build();
+            minioClient.removeObject(args);
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
 
     private UploadResult uploadBytes(String fileName, byte[] bytes, String contentType) throws Exception {
         ByteArrayInputStream is = null;
