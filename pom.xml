@@ -112,6 +112,7 @@
             <artifactId>minio-admin</artifactId>
             <version>${minio-admin.version}</version>
         </dependency>
+
         <!-- End Min IO -->
 
     </dependencies>

@@ -40,7 +40,7 @@ minio:
     bucket: <bucket>
     auto-create-bucket: true
     allow-type: ["pdf","txt","json"] // type file allow to save
-    max-size: <size> // maximum file upload size (megabyte)
+    max-size: 100 // maximum file upload size (megabyte)
 ```
 
 * Finally, declare `MinioService` object

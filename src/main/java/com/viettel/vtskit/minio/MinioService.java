@@ -19,6 +19,8 @@ import io.minio.messages.VersioningConfiguration;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +36,7 @@ import java.util.*;
 
 public class MinioService {
 
+    private Logger LOGGER = LoggerFactory.getLogger(MinioService.class);
     private MinioAdminClient minioAdminClient ;
     private MinioClient minioClient;
     private MinioProperties minioProperties;
@@ -46,23 +49,23 @@ public class MinioService {
                             .bucket(bucketname)
                             .build());
         } catch (InvalidKeyException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (ErrorResponseException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (InvalidResponseException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (ServerException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (InsufficientDataException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (XmlParserException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (InternalException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         }
         return bucketname;
     }
@@ -73,23 +76,23 @@ public class MinioService {
             minioClient.setBucketVersioning(
                     SetBucketVersioningArgs.builder().bucket(bucketname).config(config).build());
         } catch (InvalidKeyException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (ErrorResponseException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (InvalidResponseException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (ServerException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (InsufficientDataException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (XmlParserException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (InternalException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         }
         return null;
     }
@@ -97,23 +100,23 @@ public class MinioService {
         try {
             minioClient.removeBucket(RemoveBucketArgs.builder().bucket(bucketname).build());
         } catch (InvalidKeyException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (ErrorResponseException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (InvalidResponseException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (ServerException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (InsufficientDataException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (XmlParserException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (InternalException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         }
         return bucketname;
     }
@@ -122,11 +125,11 @@ public class MinioService {
             Map<String, String> a = minioAdminClient.listCannedPolicies();
             return minioAdminClient.getUserInfo(username);
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (InvalidKeyException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         }
         return null;
     }
@@ -141,23 +144,23 @@ public class MinioService {
             }
             return listName;
         } catch (InvalidKeyException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (ErrorResponseException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (InvalidResponseException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (ServerException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (InsufficientDataException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (XmlParserException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (InternalException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         }
 
         return null;
@@ -191,7 +194,7 @@ public class MinioService {
 
             return fileItem;
         }catch (ErrorResponseException | InsufficientDataException | InternalException | InvalidKeyException | InvalidResponseException | IOException | NoSuchAlgorithmException | ServerException | XmlParserException ex){
-            ex.printStackTrace();
+            LOGGER.error(ex.getMessage(),ex);
             return null;
         }
     }
@@ -210,7 +213,8 @@ public class MinioService {
             response = minioClient.getObject(args);
             return IOUtils.toByteArray(response);
         }catch (Exception e){
-            throw e;
+            LOGGER.error(e.getMessage(),e);
+            return null;
         }
 
     }
@@ -230,7 +234,8 @@ public class MinioService {
 
             return IOUtils.toByteArray(response);
         }catch (Exception e){
-            throw e;
+            LOGGER.error(e.getMessage(),e);
+            return null;
         }
 
     }
@@ -246,7 +251,7 @@ public class MinioService {
                     .build();
             minioClient.removeObject(args);
         }catch (Exception e){
-            throw e;
+            LOGGER.error(e.getMessage(),e);
         }
     }
 
@@ -262,7 +267,7 @@ public class MinioService {
                     .build();
             minioClient.removeObject(args);
         }catch (Exception e){
-            throw e;
+            LOGGER.error(e.getMessage(),e);
         }
     }
 
@@ -272,10 +277,14 @@ public class MinioService {
         try {
             is = new ByteArrayInputStream(bytes);
             PutObjectArgs.Builder uploadArgs = PutObjectArgs.builder();
+
+
             uploadArgs.contentType(contentType);
             uploadArgs.object(fileName);
             uploadArgs.bucket(minioProperties.getBucket());
             uploadArgs.stream(is, bytes.length, ConstantConfiguration.PART_SIZE);
+
+
             ObjectWriteResponse response = minioClient.putObject(uploadArgs.build());
             UploadResult result = new UploadResult();
             result.setEtag(response.etag());
@@ -283,7 +292,8 @@ public class MinioService {
             result.setVersionId(response.versionId());
             return result;
         } catch (Exception ex) {
-            throw ex;
+            LOGGER.error(ex.getMessage(),ex);
+            return null;
         } finally {
             if (is != null) {
                 is.close();
@@ -296,7 +306,6 @@ public class MinioService {
         if (Validate.validateSize(file, minioProperties)) {
             throw new IllegalArgumentException("The file size is too large, please reconfigure");
         }
-
         if (Validate.validateType(file, minioProperties)) {
             return uploadBytes(file.getOriginalFilename(), fileData, file.getContentType());
 
