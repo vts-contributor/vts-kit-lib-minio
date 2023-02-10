@@ -171,6 +171,19 @@ public class MinioService {
                 .bucket(bucketname)
                 .prefix(path)
                 .includeUserMetadata(false)
+                .includeVersions(false)
+                .build();
+        Iterable < Result < Item >> results = minioClient.listObjects(args);
+        List < FileObjectDTO > resultList = fileInfoMapper.mapToListDTO(Lists.newArrayList(results));
+        orderData(resultList);
+        return resultList;
+    }
+    public List < FileObjectDTO > getListFileWithVersion(String bucketname, @Nullable String path) throws IOException, InvalidKeyException, InvalidResponseException, InsufficientDataException, NoSuchAlgorithmException, ServerException, InternalException, XmlParserException, ErrorResponseException {
+        if (path == null) path = "";
+        ListObjectsArgs args = new ListObjectsArgs.Builder()
+                .bucket(bucketname)
+                .prefix(path)
+                .includeUserMetadata(false)
                 .includeVersions(true)
                 .build();
         Iterable < Result < Item >> results = minioClient.listObjects(args);
@@ -272,7 +285,7 @@ public class MinioService {
     }
 
 
-    private UploadResult uploadBytes(String fileName, byte[] bytes, String contentType) throws Exception {
+    private UploadResult uploadBytes(String fileName, byte[] bytes, String contentType, String bucketName) throws Exception {
         ByteArrayInputStream is = null;
         try {
             is = new ByteArrayInputStream(bytes);
@@ -281,7 +294,11 @@ public class MinioService {
 
             uploadArgs.contentType(contentType);
             uploadArgs.object(fileName);
-            uploadArgs.bucket(minioProperties.getBucket());
+            if (bucketName.isEmpty() || bucketName==null){
+                uploadArgs.bucket(minioProperties.getBucket());
+            }else {
+                uploadArgs.bucket(bucketName);
+            }
             uploadArgs.stream(is, bytes.length, ConstantConfiguration.PART_SIZE);
 
 
@@ -301,23 +318,23 @@ public class MinioService {
         }
     }
 
-    public UploadResult uploadMultipartFile(MultipartFile file) throws Exception {
+    public UploadResult uploadMultipartFile(MultipartFile file, @Nullable String bucketName) throws Exception {
         byte[] fileData = file.getBytes();
         if (Validate.validateSize(file, minioProperties)) {
             throw new IllegalArgumentException("The file size is too large, please reconfigure");
         }
         if (Validate.validateType(file, minioProperties)) {
-            return uploadBytes(file.getOriginalFilename(), fileData, file.getContentType());
+            return uploadBytes(file.getOriginalFilename(), fileData, file.getContentType(), bucketName);
 
         }
         throw new IllegalArgumentException("Content-type not allow");
     }
 
-    public UploadResult uploadString(String content) throws Exception {
+    public UploadResult uploadString(String content, @Nullable String bucketName) throws Exception {
 
         byte[] fileData = content.getBytes(Charset.forName("UTF-8"));
         String randomName = String.format("%s.txt", StringUtils.randomString());
-        return uploadBytes(randomName, fileData, "text/plain");
+        return uploadBytes(randomName, fileData, "text/plain",bucketName );
     }
     private void orderData(List < FileObjectDTO > dataList) {
         Collections.sort(dataList, new Comparator < FileObjectDTO > () {

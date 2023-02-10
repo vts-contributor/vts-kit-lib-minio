@@ -6,7 +6,7 @@ target/
 vts-kit-ms-minio-integrated.iml
 .settings.xml
 .gitignore
-
+vts-kit-lib-minio.iml
 ### STS ###
 .apt_generated
 .classpath

@@ -10,6 +10,7 @@ Feature List:
     * [Get List Bucket](#get-list-bucket)
 - File
     * [Get List File](#get-list-file)
+    * [Get List File With Version](#get-list-file-with-version)
     * [Get File Info](#get-file-info)
     * [Get File Data](#get-file-data)
     * [Get File Data with Version](#get-file-data-with-version-file)
@@ -76,6 +77,10 @@ List<String> listBucket = minioService.getListBucket(bucketname);
 ##### Get list file
 ```java
 List<FileObjectDTO> listFileObject = minioService.getListFile(String bucketname, @Nullable String path);
+```
+##### Get list file with version
+```java
+List<FileObjectDTO> listFileObject = minioService.getListFileWithVersion(String bucketname, @Nullable String path);
 ```
 ##### Get file info
 ```java
