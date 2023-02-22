@@ -70,7 +70,7 @@ String bucketName = minioService.deleteBucket(bucketname);
 
 ##### Get list bucket
 ```java
-List<String> listBucket = minioService.getListBucket(bucketname);
+List<String> listBucket = minioService.getListBucket();
 ```
 
 ### File
